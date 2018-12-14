@@ -1,5 +1,7 @@
 package com.dev999.maven.genertation.service;
 
+import java.util.List;
+
 /**
  * 公共生成代码处理
  *
@@ -10,27 +12,30 @@ package com.dev999.maven.genertation.service;
  */
 public class CommonGeneratingDispose extends CommonGeneratingParam {
 
+    private static ServiceFileDispose serviceFileDispose = ServiceFileDispose.getServiceFileDispose();
     /**
      * 开始创建
      */
     public void startCreate(){
-        //初始化
-        init();
 
+        //TODO 创建service
+        createServices();
 
-        //创建dao
-
-        //创建service
-
-        //创建controller
+        //TODO 创建controller
 
     }
 
     /**
-     * 初始化需要的资源
+     * 创建service层代码
      */
-    private void init() {
+    private void createServices() {
+        if(!generationService){
+            return;
+        }
+
+        serviceFileDispose.createServices(targetProject,servicePackagePath,entityNames);
 
     }
+
 
 }
