@@ -25,7 +25,7 @@ import java.util.*;
  * Goal which generates MyBatis/iBATIS artifacts.
  * 
  * @goal generate
- * @phase generate-sources
+ * @phase automatic-code-generation
  */
 public class MyBatisGeneratorMojo extends AbstractMojo {
 
