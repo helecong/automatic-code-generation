@@ -2,7 +2,9 @@ package com.dev999.maven.genertation.property;
 
 import com.dev999.maven.genertation.constant.ApplicationConstant;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -64,7 +66,7 @@ public class ClassProperty extends BaseProperty{
     /**
      * 方法集合
      */
-    private Set<MethodProperty> methods;
+    private List<MethodProperty> methods;
 
     /**
      * 生成getter
@@ -81,7 +83,7 @@ public class ClassProperty extends BaseProperty{
         importClasss = new HashSet<String>();
         interfaceClasss = new HashSet<String>();
         globalVariables = new HashSet<VariableProperty>();
-        methods = new HashSet<MethodProperty>();
+        methods = new ArrayList<MethodProperty>();
     }
 
     @Override
@@ -94,12 +96,14 @@ public class ClassProperty extends BaseProperty{
         newLine();
 
         for(String staticImportClass : staticImportClasss){
-            newLine().append("import static ").append(staticImportClass).append("\\.*");
+            newLine().append("import static ").append(staticImportClass).append("\\.*;");
         }
         newLine();
         for(String importClass : importClasss){
-            newLine().append("import ").append(importClass);
+            newLine().append("import ").append(importClass).append(";");
         }
+        newLine();
+        newLine();
         addClassDoc(className);
         addClassAnnotations();
         newLine().append(accessModifier);
@@ -111,16 +115,16 @@ public class ClassProperty extends BaseProperty{
         }
         blank().append(className);
 
-        if("".equals(extensClass)){
-            blank().append(extensClass);
+        if(!"".equals(extensClass)){
+            blank().append("extends ").append(extensClass);
         }
 
         if(interfaceClasss != null && interfaceClasss.size()>0){
-            blank().append("interface ");
+            blank().append("implements ");
             for(String interfaceClass : interfaceClasss){
                 sb.append(interfaceClass).append(", ");
             }
-            sb.substring(0,sb.length()-2);
+            sb.deleteCharAt(sb.length()-2);
         }
         sb.append("{");
 
@@ -136,7 +140,8 @@ public class ClassProperty extends BaseProperty{
         newLine();
         if(methods != null && methods.size()>0){
             for(MethodProperty method : methods){
-                newLine().append(method.getSource(interfaceClasss!=null&&interfaceClasss.size()>0));
+                newLine();
+                newLine().append(method.getSource(ApplicationConstant.CLASS_TYPE_INTERFACE.equals(classTyoe) ));
             }
         }
 
@@ -192,6 +197,12 @@ public class ClassProperty extends BaseProperty{
     public void setImportClasss(Set<String> importClasss) {
         this.importClasss = importClasss;
     }
+    public void setImportClasss(String importClass) {
+        if(this.importClasss ==null){
+            this.importClasss = new HashSet<String>();
+        }
+        this.importClasss.add(importClass);
+    }
 
     public String getAccessModifier() {
         return accessModifier;
@@ -240,6 +251,12 @@ public class ClassProperty extends BaseProperty{
     public void setInterfaceClasss(Set<String> interfaceClasss) {
         this.interfaceClasss = interfaceClasss;
     }
+    public void setInterfaceClasss(String interfaceClass) {
+        if(this.interfaceClasss == null){
+            this.interfaceClasss = new HashSet<String>();
+        }
+        this.interfaceClasss.add(interfaceClass);
+    }
 
     public Set<VariableProperty> getGlobalVariables() {
         return globalVariables;
@@ -249,11 +266,18 @@ public class ClassProperty extends BaseProperty{
         this.globalVariables = globalVariables;
     }
 
-    public Set<MethodProperty> getMethods() {
+    public void setGlobalVariables(VariableProperty globalVariable) {
+        if(this.globalVariables == null){
+            this.globalVariables = new HashSet<VariableProperty>();
+        }
+        this.globalVariables.add(globalVariable);
+    }
+
+    public List<MethodProperty> getMethods() {
         return methods;
     }
 
-    public void setMethods(Set<MethodProperty> methods) {
+    public void setMethods(List<MethodProperty> methods) {
         this.methods = methods;
     }
 

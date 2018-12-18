@@ -1,12 +1,11 @@
 package com.dev999.maven.genertation;
 
+import com.dev999.maven.genertation.mybatis.api.MyBatisGenerator;
 import com.dev999.maven.genertation.service.CommonGeneratingDispose;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
-import org.json.JSONObject;
-import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.api.ShellCallback;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.config.xml.ConfigurationParser;
@@ -127,10 +126,12 @@ public class MyBatisGeneratorMojo extends AbstractMojo {
         // 借助 mybatis-genertation 生成dao层
         Configuration configuration = genertationDao();
 
-        // 生成service 和 controller
-        CommonGeneratingDispose commonGeneratingDispose = new CommonGeneratingDispose();
-        commonGeneratingDispose.initParam(configuration);
-        commonGeneratingDispose.startCreate();
+//        getLog().info("开始生产serivice");
+//        // 生成service 和 controller
+//        MavenProgressCallback callback = new MavenProgressCallback(getLog(),true);
+//        CommonGeneratingDispose commonGeneratingDispose = new CommonGeneratingDispose(callback);
+//        commonGeneratingDispose.initParam(configuration);
+//        commonGeneratingDispose.startCreate();
 
 
 
@@ -201,11 +202,14 @@ public class MyBatisGeneratorMojo extends AbstractMojo {
 
             ShellCallback callback = new MavenShellCallback(this, overwrite);
 
-            MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config,
-                    callback, warnings);
+            MavenProgressCallback callback1 = new MavenProgressCallback(getLog(),
+                    verbose);
 
-            myBatisGenerator.generate(new MavenProgressCallback(getLog(),
-                    verbose), contextsToRun, fullyqualifiedTables);
+            MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config,
+                    callback, warnings,callback1);
+
+
+            myBatisGenerator.generate(callback1, contextsToRun, fullyqualifiedTables);
 
         } catch (XMLParserException e) {
             for (String error : e.getErrors()) {

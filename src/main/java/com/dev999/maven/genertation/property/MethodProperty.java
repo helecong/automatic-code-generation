@@ -59,25 +59,31 @@ public class MethodProperty extends BaseProperty {
         //添加注解
         addAnnotations();
         newLine();
+        table();
         if(!isInterface){
-            table().append(accessModifier);
+            sb.append(accessModifier);
+            blank();
         }
-        blank().append(resultClass);
+        sb.append(resultClass);
         blank().append(mothodName).append("(");
         for(VariableProperty param : params){
             sb.append(param.getParamSource()).append(", ");
         }
         if(params.size()>0){
-            sb.substring(0,sb.length()-2);
+            sb.deleteCharAt(sb.length()-2);
         }
-        sb.append("){");
+        sb.append(")");
 
         if(!abstractMethod&&!isInterface){
+            sb.append("{");
             newLine().append(body);
             newLine();
+            table().append("}");
+        }else{
+            sb.append(";");
         }
 
-        table().append("}");
+
 
         String s = sb.toString();
         sb = null;

@@ -1,15 +1,11 @@
 package com.dev999.maven.genertation.service;
 
+import com.dev999.maven.genertation.property.ClassProperty;
 import org.eclipse.aether.util.StringUtils;
-import org.mybatis.generator.config.Configuration;
-import org.mybatis.generator.config.Context;
-import org.mybatis.generator.config.JavaModelGeneratorConfiguration;
-import org.mybatis.generator.config.TableConfiguration;
+import org.mybatis.generator.api.GeneratedJavaFile;
+import org.mybatis.generator.config.*;
 
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * 生成 代码需要的公共参数集合
@@ -58,6 +54,22 @@ public class CommonGeneratingParam {
      */
     protected String targetEntityPackage;
 
+    /**
+     * DAO存放包路径
+     */
+    protected String targetDaoPackage;
+
+    protected Map<String,GeneratedJavaFile> entityJavaFiles;
+    /**
+     * 原来的java文件集合
+     */
+    protected List<GeneratedJavaFile> generatedJavaFiles;
+
+    /**
+     * source集合
+     */
+    protected List<ClassProperty> sourceList;
+
 
     private static final String FALSE = "false";
     /**
@@ -69,6 +81,8 @@ public class CommonGeneratingParam {
         for(Context context : contexts){
             parseContext(context);
         }
+        this.entityJavaFiles = new HashMap<String,GeneratedJavaFile>();
+        this.sourceList = new ArrayList<ClassProperty>();
 
         //TODO 创建文件流
 
@@ -102,6 +116,9 @@ public class CommonGeneratingParam {
         JavaModelGeneratorConfiguration javaModelGeneratorConfiguration = context.getJavaModelGeneratorConfiguration();
         targetProject = javaModelGeneratorConfiguration.getTargetProject();
         targetEntityPackage = javaModelGeneratorConfiguration.getTargetPackage();
+
+        JavaClientGeneratorConfiguration javaClientGeneratorConfiguration = context.getJavaClientGeneratorConfiguration();
+        targetDaoPackage =javaClientGeneratorConfiguration.getTargetPackage();
 
         checkParam();
     }
@@ -180,6 +197,38 @@ public class CommonGeneratingParam {
 
     public void setTargetEntityPackage(String targetEntityPackage) {
         this.targetEntityPackage = targetEntityPackage;
+    }
+
+    public String getTargetDaoPackage() {
+        return targetDaoPackage;
+    }
+
+    public void setTargetDaoPackage(String targetDaoPackage) {
+        this.targetDaoPackage = targetDaoPackage;
+    }
+
+    public Map<String, GeneratedJavaFile> getEntityJavaFiles() {
+        return entityJavaFiles;
+    }
+
+    public void setEntityJavaFiles(Map<String, GeneratedJavaFile> entityJavaFiles) {
+        this.entityJavaFiles = entityJavaFiles;
+    }
+
+    public List<GeneratedJavaFile> getGeneratedJavaFiles() {
+        return generatedJavaFiles;
+    }
+
+    public void setGeneratedJavaFiles(List<GeneratedJavaFile> generatedJavaFiles) {
+        this.generatedJavaFiles = generatedJavaFiles;
+    }
+
+    public List<ClassProperty> getSourceList() {
+        return sourceList;
+    }
+
+    public void setSourceList(List<ClassProperty> sourceList) {
+        this.sourceList = sourceList;
     }
 
     @Override

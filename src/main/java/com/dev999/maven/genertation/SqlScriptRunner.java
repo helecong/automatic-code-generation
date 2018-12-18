@@ -15,6 +15,7 @@
  */
 package com.dev999.maven.genertation;
 
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.mybatis.generator.internal.util.StringUtility;

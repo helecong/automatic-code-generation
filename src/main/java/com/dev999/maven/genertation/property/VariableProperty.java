@@ -39,6 +39,11 @@ public class VariableProperty extends BaseProperty{
      */
     private String defalutVal;
 
+    /**
+     * 变量的全类名
+     */
+    private String fullyQualifiedName;
+
     public VariableProperty(){
         super();
     }
@@ -107,7 +112,7 @@ public class VariableProperty extends BaseProperty{
         blank().append(variableName).append("){");
         newLine();
         table();
-        table().append("return ").append(variableName).append(";");
+        table().append("this. ").append(variableName).append(" = ").append(variableName).append(";");
         newLine();
         table().append("}");
 
@@ -127,5 +132,61 @@ public class VariableProperty extends BaseProperty{
         blank().append(variableName);
 
         return sb.toString();
+    }
+
+    public String getAccessModifier() {
+        return accessModifier;
+    }
+
+    public void setAccessModifier(String accessModifier) {
+        this.accessModifier = accessModifier;
+    }
+
+    public boolean isStaticVariable() {
+        return staticVariable;
+    }
+
+    public void setStaticVariable(boolean staticVariable) {
+        this.staticVariable = staticVariable;
+    }
+
+    public boolean isFinalVariable() {
+        return finalVariable;
+    }
+
+    public void setFinalVariable(boolean finalVariable) {
+        this.finalVariable = finalVariable;
+    }
+
+    public String getVariableType() {
+        return variableType;
+    }
+
+    public void setVariableType(String variableType) {
+        this.variableType = variableType;
+    }
+
+    public String getVariableName() {
+        return variableName;
+    }
+
+    public void setVariableName(String variableName) {
+        this.variableName = variableName;
+    }
+
+    public String getDefalutVal() {
+        return defalutVal;
+    }
+
+    public void setDefalutVal(String defalutVal) {
+        this.defalutVal = defalutVal;
+    }
+
+    public String getFullyQualifiedName() {
+        return fullyQualifiedName;
+    }
+
+    public void setFullyQualifiedName(String fullyQualifiedName) {
+        this.fullyQualifiedName = fullyQualifiedName;
     }
 }

@@ -16,6 +16,7 @@
 
 package com.dev999.maven.genertation;
 
+
 import org.mybatis.generator.exception.ShellException;
 import org.mybatis.generator.internal.DefaultShellCallback;
 import org.mybatis.generator.internal.util.messages.Messages;

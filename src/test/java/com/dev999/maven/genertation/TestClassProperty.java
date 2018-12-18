@@ -3,7 +3,9 @@ package com.dev999.maven.genertation;
 import com.dev999.maven.genertation.property.ClassProperty;
 import com.dev999.maven.genertation.property.MethodProperty;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -27,7 +29,7 @@ public class TestClassProperty {
     }
 
     private static void addMethods(ClassProperty classProperty) {
-        Set<MethodProperty> methods = new HashSet<MethodProperty>();
+        List<MethodProperty> methods = new ArrayList<MethodProperty>();
 
         MethodProperty hello = new MethodProperty();
         hello.setMothodName("hello");

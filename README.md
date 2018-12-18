@@ -19,4 +19,4 @@
 
 mvn groupId ：artifactId ：version ：goal
 
-mvn com.dev999.maven ：automatic-code-generation ：1.0.0 ：test
+mvn com.dev999.maven ：automatic-code-generation ：1.0.0 ：generation

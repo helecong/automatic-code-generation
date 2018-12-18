@@ -32,15 +32,11 @@ public abstract class BaseProperty {
 
         table().append("/**");
         newLine();
-        table().append("* ");
-        newLine();
         table().append("* ").append(mes);
         if(!"".equals(doc)){
             newLine();
             table().append("* ").append(doc);
         }
-        newLine();
-        table().append("* ");
         newLine();
         table().append("*/");
         return sb;
@@ -56,15 +52,11 @@ public abstract class BaseProperty {
 
         sb.append("/**");
         newLine();
-        blank().append("* ");
-        newLine();
         blank().append("* ").append(mes);
         if(!"".equals(doc)){
             newLine();
             blank().append("* ").append(doc);
         }
-        newLine();
-        blank().append("* ");
         newLine();
         blank().append("*/");
         return sb;
@@ -148,6 +140,16 @@ public abstract class BaseProperty {
         sb.append("    ");
         return sb;
     }
+    /**
+     * 制表
+     * @return
+     */
+    public StringBuilder table(int i) {
+       for(int j = 0 ; j < i ; j++){
+           table();
+       }
+        return sb;
+    }
 
     public String getDoc() {
         return doc;
@@ -155,5 +157,28 @@ public abstract class BaseProperty {
 
     public void setDoc(String doc) {
         this.doc = doc;
+    }
+
+    public StringBuilder getSb() {
+        return sb;
+    }
+
+    public void setSb(StringBuilder sb) {
+        this.sb = sb;
+    }
+
+    public Set<String> getAnnotations() {
+        return annotations;
+    }
+
+    public void setAnnotations(Set<String> annotations) {
+        this.annotations = annotations;
+    }
+
+    public void setAnnotations(String annotation) {
+        if(annotations == null){
+            annotations = new HashSet<String>();
+        }
+        annotations.add(annotation);
     }
 }
