@@ -40,6 +40,21 @@
 
 详细需要的依赖可以查看<依赖插件>一栏
 
+## 配置文件
+
+在mybatis-generator-maven-plugin 插件需要的配置文件的基础上，新增了5个property属性，具体如下：
+        
+    <!-- 生成对应的controller 默认为true -->    
+    <property name="generationController" value="true"/>
+    <!-- 生成对应的service 默认为true -->
+    <property name="generationService" value="true"/>
+    <!-- 添加swagger注解文档 默认为true -->
+    <property name="addSwaggerAPIAnnotation" value="true"/>
+    <!-- controller包名 在次包名下会自动更具所创建的表新增包 -->
+    <property name="controllerPackagePath" value="com.dev999.azbz.commodity.controller"/>
+    <-- service包名 在次包名下会自动更具所创建的表新增包 -->
+    <property name="servicePackagePath" value="com.dev999.azbz.commodity.service"/>
+
 ## 执行maven命令
 
 mvn automatic-code-generation:generate
