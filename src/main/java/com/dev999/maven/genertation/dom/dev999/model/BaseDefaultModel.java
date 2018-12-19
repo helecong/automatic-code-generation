@@ -11,9 +11,16 @@ import com.dev999.maven.genertation.property.MethodProperty;
 public abstract class BaseDefaultModel extends MethodProperty {
     protected String daoBeanName;
     protected String entityName;
+    protected boolean interfaceClass = false;
 
-    public BaseDefaultModel(String daoBeanName, String entityName){
+    public BaseDefaultModel(String daoBeanName, String entityName,boolean interfaceClass){
         this.daoBeanName = daoBeanName;
         this.entityName = entityName;
+        this.interfaceClass = interfaceClass;
+
+        if(!interfaceClass){
+            this.setAnnotations("@Override");
+        }
+
     }
 }

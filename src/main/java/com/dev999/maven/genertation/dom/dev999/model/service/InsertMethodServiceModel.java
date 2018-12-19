@@ -12,8 +12,8 @@ import java.util.List;
  * @date 2018/12/17
  */
 public class InsertMethodServiceModel extends BaseDefaultModel {
-    public InsertMethodServiceModel(String daoBeanName, String entityName) {
-        super(daoBeanName,entityName);
+    public InsertMethodServiceModel(String daoBeanName, String entityName,boolean interfaceClass) {
+        super(daoBeanName,entityName,interfaceClass);
         initMethod();
     }
 

@@ -2,6 +2,8 @@ package com.dev999.maven.genertation.dom.dev999;
 
 import com.dev999.maven.genertation.property.ClassProperty;
 import com.dev999.maven.genertation.property.VariableProperty;
+import com.dev999.maven.genertation.service.CommonGeneratingParam;
+import com.dev999.maven.genertation.utils.NameUtils;
 import com.dev999.maven.genertation.utils.StringUtils;
 
 import java.util.HashSet;
@@ -40,6 +42,11 @@ public class DefaultServiceJavaFile extends ClassProperty{
      * 实体类的别名，用于注释生成，如果没有默认为 entityName的名称
      */
     private String entityAlias;
+    private CommonGeneratingParam commonGeneratingParam;
+
+    public DefaultServiceJavaFile(CommonGeneratingParam commonGeneratingParam){
+        this.commonGeneratingParam = commonGeneratingParam;
+    }
 
     /**
      * 初始化文件
@@ -57,9 +64,11 @@ public class DefaultServiceJavaFile extends ClassProperty{
         this.setImportClasss("java.util.Map");
         this.setImportClasss("tk.mybatis.mapper.entity.Example");
         this.setImportClasss("tk.mybatis.mapper.entity.Example.Criteria");
+        this.setImportClasss(NameUtils.serviceInterfaceFullPath(commonGeneratingParam.getServicePackagePath(),entityName));
 
         this.setDoc(entityAlias+" service实现类");
         this.setAnnotations("@Service");
+        this.setInterfaceClasss(NameUtils.serviceInterfaceName(entityName));
 
         Set<VariableProperty> globalVariables = new HashSet<VariableProperty>();
 
@@ -69,7 +78,7 @@ public class DefaultServiceJavaFile extends ClassProperty{
 
         this.setGlobalVariables(globalVariables);
 
-        this.setMethods(new DefaultServiceMethods(daoBeanName,entityName).getDefaultMethods());
+        this.setMethods(new DefaultServiceMethods(daoBeanName,entityName,false).getDefaultMethods());
 
         this.setGeneratedGetter(false);
         this.setGeneratedSetter(false);

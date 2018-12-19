@@ -52,7 +52,7 @@ public class DefaultServiceInterfaceJavaFile extends ClassProperty{
         this.setDoc(entityAlias+" service接口");
         this.setClassTyoe(ApplicationConstant.CLASS_TYPE_INTERFACE);
 
-        this.setMethods(new DefaultServiceMethods(daoBeanName,entityName).getDefaultMethods());
+        this.setMethods(new DefaultServiceMethods(daoBeanName,entityName,true).getDefaultMethods());
 
         this.setGeneratedGetter(false);
         this.setGeneratedSetter(false);

@@ -15,8 +15,8 @@ import java.util.List;
  */
 public class QueryListByMapMethodServiceModel extends BaseDefaultModel {
 
-    public QueryListByMapMethodServiceModel(String daoBeanName, String entityName){
-        super(daoBeanName,entityName);
+    public QueryListByMapMethodServiceModel(String daoBeanName, String entityName,boolean interfaceClass){
+        super(daoBeanName,entityName,interfaceClass);
         initMethod();
     }
 

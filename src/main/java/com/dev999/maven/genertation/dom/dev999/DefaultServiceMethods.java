@@ -15,10 +15,12 @@ public class DefaultServiceMethods {
     private String entityName;
 
     private List<MethodProperty> methodProperties ;
+    private boolean interfaceClass = false;
 
-    public DefaultServiceMethods(String daoBeanName,String entityName){
+    public DefaultServiceMethods(String daoBeanName,String entityName,boolean interfaceClass){
         this.daoBeanName = daoBeanName;
         this.entityName = entityName;
+        this.interfaceClass = interfaceClass;
     }
 
     public List<MethodProperty> getDefaultMethods(){
@@ -43,7 +45,7 @@ public class DefaultServiceMethods {
 
         List<MethodProperty> methods = new ArrayList<MethodProperty>();
 
-        methods.add(new UpdateMethodServiceModel(daoBeanName,entityName));
+        methods.add(new UpdateMethodServiceModel(daoBeanName,entityName,interfaceClass));
 
         return methods;
     }
@@ -51,8 +53,8 @@ public class DefaultServiceMethods {
     private Collection<? extends MethodProperty> queryMethod() {
         List<MethodProperty> methods = new ArrayList<MethodProperty>();
 
-        methods.add(new QueryListByMapMethodServiceModel(daoBeanName,entityName));
-        methods.add(new QueryByIdMethodServiceModel(daoBeanName,entityName));
+        methods.add(new QueryListByMapMethodServiceModel(daoBeanName,entityName,interfaceClass));
+        methods.add(new QueryByIdMethodServiceModel(daoBeanName,entityName,interfaceClass));
 
         return methods;
     }
@@ -60,7 +62,7 @@ public class DefaultServiceMethods {
     private Collection<? extends MethodProperty> delectMethod() {
         List<MethodProperty> methods = new ArrayList<MethodProperty>();
 
-        methods.add(new DeleteByIdMethodServiceModel(daoBeanName,entityName));
+        methods.add(new DeleteByIdMethodServiceModel(daoBeanName,entityName,interfaceClass));
 
         return methods;
     }
@@ -68,8 +70,8 @@ public class DefaultServiceMethods {
     private Collection<? extends MethodProperty> insertMethod() {
         List<MethodProperty> methods = new ArrayList<MethodProperty>();
 
-        methods.add(new InsertMethodServiceModel(daoBeanName,entityName));
-        methods.add(new InsertListMethodServiceModel(daoBeanName,entityName));
+        methods.add(new InsertMethodServiceModel(daoBeanName,entityName,interfaceClass));
+        methods.add(new InsertListMethodServiceModel(daoBeanName,entityName,interfaceClass));
 
         return methods;
     }

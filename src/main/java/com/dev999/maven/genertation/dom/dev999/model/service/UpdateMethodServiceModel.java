@@ -12,8 +12,8 @@ import java.util.List;
  * @date 2018/12/17
  */
 public class UpdateMethodServiceModel extends BaseDefaultModel {
-    public UpdateMethodServiceModel(String daoBeanName, String entityName) {
-        super(daoBeanName,entityName);
+    public UpdateMethodServiceModel(String daoBeanName, String entityName,boolean interfaceClass) {
+        super(daoBeanName,entityName,interfaceClass);
         initMethod();
     }
 
@@ -21,6 +21,8 @@ public class UpdateMethodServiceModel extends BaseDefaultModel {
         this.setMothodName("update");
         this.setResultClass("int");
         this.setDoc("更新数据");
+
+
 
         List<VariableProperty> params = new ArrayList<VariableProperty>();
         VariableProperty variableProperty = new VariableProperty(StringUtils.firstNameUpper(entityName), StringUtils.firstNameLower(entityName));

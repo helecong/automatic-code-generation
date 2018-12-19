@@ -97,9 +97,6 @@ public class CommonGeneratingDispose extends CommonGeneratingParam {
             String source;
 
             try {
-                callback.startTask(targetProject);
-                callback.startTask(clazz.getPackagePath());
-                callback.startTask(clazz.getClassName());
 
                 File directory = FileUtils.getDirectory(targetProject,clazz.getPackagePath());
                 targetFile = new File(directory, clazz.getClassName()+".java");
@@ -140,7 +137,7 @@ public class CommonGeneratingDispose extends CommonGeneratingParam {
         interfaceJavaFile.initSource();
         sourceList.add(interfaceJavaFile);
 
-        DefaultServiceJavaFile serviceFile = new DefaultServiceJavaFile();
+        DefaultServiceJavaFile serviceFile = new DefaultServiceJavaFile(this);
         serviceFile.setDaoPackage(targetDaoPackage).setDaoBeanName(name+"Mapper");
         serviceFile.setEntityPackage(targetEntityPackage).setEntityName(name);
         serviceFile.setClassName(name+"ServiceImpl");

@@ -12,8 +12,8 @@ import java.util.List;
  * @date 2018/12/17
  */
 public class DeleteByIdMethodServiceModel extends BaseDefaultModel {
-    public DeleteByIdMethodServiceModel(String daoBeanName, String entityName) {
-        super(daoBeanName,entityName);
+    public DeleteByIdMethodServiceModel(String daoBeanName, String entityName,boolean interfaceClass) {
+        super(daoBeanName,entityName,interfaceClass);
         initMethod();
     }
 
