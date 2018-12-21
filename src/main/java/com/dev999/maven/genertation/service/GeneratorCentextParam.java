@@ -12,7 +12,7 @@ import java.util.*;
  * @author helecong
  * @date 2018/12/12
  */
-public class CommonGeneratingParam {
+public class GeneratorCentextParam {
 
     /**
      * 是否生成controller层代码.默认为true
@@ -233,7 +233,7 @@ public class CommonGeneratingParam {
 
     @Override
     public String toString() {
-        return "CommonGeneratingParam{" +
+        return "GeneratorCentextParam{" +
                 "generationController=" + generationController +
                 ", generationService=" + generationService +
                 ", addSwaggerAPIAnnotation=" + addSwaggerAPIAnnotation +

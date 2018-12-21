@@ -8,13 +8,13 @@ import com.dev999.maven.genertation.dom.dev999.DefaultServiceJavaFile;
 import com.dev999.maven.genertation.property.ClassProperty;
 import com.dev999.maven.genertation.property.VariableProperty;
 import com.dev999.maven.genertation.utils.FileUtils;
+import com.dev999.maven.genertation.utils.NameUtils;
 import com.dev999.maven.genertation.utils.StringUtils;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.exception.ShellException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
@@ -28,7 +28,7 @@ import static org.mybatis.generator.internal.util.messages.Messages.getString;
  * @author helecong
  * @date 2018/12/12
  */
-public class CommonGeneratingDispose extends CommonGeneratingParam {
+public class GeneratorCentext extends GeneratorCentextParam {
 
 
 
@@ -38,11 +38,13 @@ public class CommonGeneratingDispose extends CommonGeneratingParam {
     protected MavenProgressCallback callback;
 
 
-
-    public CommonGeneratingDispose(MavenProgressCallback callback) {
+    public GeneratorCentext(MavenProgressCallback callback) {
         super();
         this.callback = callback;
+
     }
+
+
 
     /**
      * 开始创建
@@ -54,30 +56,29 @@ public class CommonGeneratingDispose extends CommonGeneratingParam {
 
         for (String entityName : entityNames){
             //TODO 创建service
-            VariableProperty services = createServices(entityName);
+            createServices(entityName);
 
             //TODO 创建controller
-            createContert(entityName,services);
+            createContert(entityName);
         }
 
         saveFile();
 
     }
 
-    private void createContert(String entityName, VariableProperty services) {
+    private void createContert(String entityName) {
         if(!generationController){
             return;
         }
 
-        String name = StringUtils.firstNameUpper(entityName);
 
         DefaultControllerInterfaceJavaFile controllerInterfaceJavaFile = new DefaultControllerInterfaceJavaFile(this);
-        controllerInterfaceJavaFile.setEntityName(name);
+        controllerInterfaceJavaFile.setEntityName(entityName);
         controllerInterfaceJavaFile.initSource();
         sourceList.add(controllerInterfaceJavaFile);
 
         DefaultControllerJavaFile controllerJavaFile = new DefaultControllerJavaFile(this);
-        controllerJavaFile.setEntityName(name);
+        controllerJavaFile.setEntityName(entityName);
         controllerJavaFile.initSource();
         sourceList.add(controllerJavaFile);
 
@@ -122,35 +123,22 @@ public class CommonGeneratingDispose extends CommonGeneratingParam {
 
     /**
      * 创建service层代码
+     * @param entityName
      */
-    private VariableProperty createServices(String entityName) {
+    private void createServices(String entityName) {
         if(!generationService&&!generationController){
-            return null;
+            return;
         }
-        String name = StringUtils.firstNameUpper(entityName);
 
-        DefaultServiceInterfaceJavaFile interfaceJavaFile = new DefaultServiceInterfaceJavaFile();
-        interfaceJavaFile.setDaoPackage(targetDaoPackage).setDaoBeanName(name+"Mapper");
-        interfaceJavaFile.setEntityPackage(targetEntityPackage).setEntityName(name);
-        interfaceJavaFile.setClassName("I"+name+"Service");
-        interfaceJavaFile.setPackagePath(servicePackagePath+"."+name.toLowerCase());
+        DefaultServiceInterfaceJavaFile interfaceJavaFile = new DefaultServiceInterfaceJavaFile(this);
+        interfaceJavaFile.setEntityName(entityName);
         interfaceJavaFile.initSource();
         sourceList.add(interfaceJavaFile);
 
         DefaultServiceJavaFile serviceFile = new DefaultServiceJavaFile(this);
-        serviceFile.setDaoPackage(targetDaoPackage).setDaoBeanName(name+"Mapper");
-        serviceFile.setEntityPackage(targetEntityPackage).setEntityName(name);
-        serviceFile.setClassName(name+"ServiceImpl");
-        serviceFile.setPackagePath(servicePackagePath+"."+name.toLowerCase()+".impl");
+        serviceFile.setEntityName(entityName);
         serviceFile.initSource();
         sourceList.add(serviceFile);
-
-        // 返回变量
-        VariableProperty variableProperty = new VariableProperty("I"+name+"Service",StringUtils.firstNameLower(name)+"Service");
-        variableProperty.setFullyQualifiedName(servicePackagePath+"."+name.toLowerCase()+"."+"I"+name+"Service");
-        variableProperty.setAnnotations("@Autowired");
-
-        return variableProperty;
 
     }
 

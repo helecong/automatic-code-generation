@@ -1,9 +1,9 @@
-package com.dev999.maven.genertation.dom.dev999.model.controller;
+package com.dev999.maven.genertation.dom.dev999.method.controller;
 
-import com.dev999.maven.genertation.dom.dev999.model.BaseControllerDefaultModel;
+import com.dev999.maven.genertation.dom.dev999.method.BaseMethod;
 import com.dev999.maven.genertation.property.ClassProperty;
 import com.dev999.maven.genertation.property.VariableProperty;
-import com.dev999.maven.genertation.service.CommonGeneratingParam;
+import com.dev999.maven.genertation.service.GeneratorCentext;
 import com.dev999.maven.genertation.utils.NameUtils;
 
 import java.util.ArrayList;
@@ -13,18 +13,19 @@ import java.util.List;
  * @author helecong
  * @date 2018/12/17
  */
-public class QueryByIdMethodControllerModel extends BaseControllerDefaultModel {
-    public QueryByIdMethodControllerModel(ClassProperty topClassProperty, VariableProperty serviceVariable, VariableProperty entityVariable, CommonGeneratingParam commonGeneratingParam, boolean interfaceClass) {
-        super(topClassProperty,serviceVariable,entityVariable,commonGeneratingParam,interfaceClass);
-        initMethod();
-    }
+public class QueryByIdMethodControllerModel extends BaseMethod {
 
     private static final String methodName = "queryById";
     private static final String methodDoc = "通过Id查询数据";
     private String resultClassName = "";
     private String requestClassName = "";
 
-    private void initMethod() {
+    public QueryByIdMethodControllerModel(GeneratorCentext generatorCentext, ClassProperty topClassProperty, VariableProperty entityVariable) {
+        super(generatorCentext, topClassProperty, entityVariable);
+    }
+
+    @Override
+    protected void initMethod() {
         resultClassName = createResultClass();
         requestClassName = createRequestClass();
         this.setMothodName(methodName);
@@ -33,12 +34,11 @@ public class QueryByIdMethodControllerModel extends BaseControllerDefaultModel {
 
         if(interfaceClass){
             this.setAnnotations("@RequestMapping(value = \""+methodName+"\", method = RequestMethod.POST)");
-            if(commonGeneratingParam.isAddSwaggerAPIAnnotation()){
+            if(generatorCentext.isAddSwaggerAPIAnnotation()){
                 topClassProperty.setImportClasss("io.swagger.annotations.ApiOperation");
                 this.setAnnotations("@ApiOperation(value = \""+methodDoc+entityVariable.getDoc()+"\")");
             }
         }else{
-            this.setAnnotations("@Override");
         }
 
         List<VariableProperty> params = new ArrayList<VariableProperty>();
@@ -79,7 +79,7 @@ public class QueryByIdMethodControllerModel extends BaseControllerDefaultModel {
 
         ClassProperty classProperty = new ClassProperty();
         classProperty.setClassName(resultClass);
-        String packagePath = commonGeneratingParam.getControllerPackagePath()+"."+entityVariable.getVariableName().toLowerCase()+".vo";
+        String packagePath = generatorCentext.getControllerPackagePath()+"."+entityVariable.getVariableName().toLowerCase()+".vo";
 
         classProperty.setPackagePath(packagePath);
         classProperty.setImportClasss("com.dev999.framework.common.AbstractServiceRequest");
@@ -89,13 +89,13 @@ public class QueryByIdMethodControllerModel extends BaseControllerDefaultModel {
         VariableProperty variableProperty = new VariableProperty("Long","id");
         classProperty.setGlobalVariables(variableProperty);
 
-        if(commonGeneratingParam.isAddSwaggerAPIAnnotation()){
+        if(generatorCentext.isAddSwaggerAPIAnnotation()){
             classProperty.setImportClasss("io.swagger.annotations.ApiModel");
             classProperty.setImportClasss("io.swagger.annotations.ApiModelProperty");
             variableProperty.setAnnotations("@ApiModelProperty(value = \"id\")");
             classProperty.setAnnotations("@ApiModel(value = \""+methodName+"请求参数\")");
         }
-        commonGeneratingParam.getSourceList().add(classProperty);
+        generatorCentext.getSourceList().add(classProperty);
 
         topClassProperty.setImportClasss(packagePath+"."+resultClass);
         return resultClass;
@@ -106,7 +106,7 @@ public class QueryByIdMethodControllerModel extends BaseControllerDefaultModel {
 
         ClassProperty classProperty = new ClassProperty();
         classProperty.setClassName(resultClass);
-        String packagePath = commonGeneratingParam.getControllerPackagePath()+"."+entityVariable.getVariableName().toLowerCase()+".vo";
+        String packagePath = generatorCentext.getControllerPackagePath()+"."+entityVariable.getVariableName().toLowerCase()+".vo";
 
         classProperty.setPackagePath(packagePath);
         classProperty.setImportClasss("com.dev999.framework.common.AbstractServiceResponse");
@@ -117,13 +117,13 @@ public class QueryByIdMethodControllerModel extends BaseControllerDefaultModel {
         VariableProperty variableProperty = new VariableProperty(entityVariable.getVariableType(),"data");
         classProperty.setGlobalVariables(variableProperty);
 
-        if(commonGeneratingParam.isAddSwaggerAPIAnnotation()){
+        if(generatorCentext.isAddSwaggerAPIAnnotation()){
             classProperty.setImportClasss("io.swagger.annotations.ApiModel");
             classProperty.setImportClasss("io.swagger.annotations.ApiModelProperty");
             variableProperty.setAnnotations("@ApiModelProperty(value = \""+entityVariable.getVariableName()+"返回数据\")");
             classProperty.setAnnotations("@ApiModel(value = \""+methodName+"返回结果\")");
         }
-        commonGeneratingParam.getSourceList().add(classProperty);
+        generatorCentext.getSourceList().add(classProperty);
 
         topClassProperty.setImportClasss(packagePath+"."+resultClass);
         return resultClass;

@@ -1,9 +1,9 @@
-package com.dev999.maven.genertation.dom.dev999.model.controller;
+package com.dev999.maven.genertation.dom.dev999.method.controller;
 
-import com.dev999.maven.genertation.dom.dev999.model.BaseControllerDefaultModel;
+import com.dev999.maven.genertation.dom.dev999.method.BaseMethod;
 import com.dev999.maven.genertation.property.ClassProperty;
 import com.dev999.maven.genertation.property.VariableProperty;
-import com.dev999.maven.genertation.service.CommonGeneratingParam;
+import com.dev999.maven.genertation.service.GeneratorCentext;
 import com.dev999.maven.genertation.utils.FieldUtils;
 import com.dev999.maven.genertation.utils.NameUtils;
 import org.mybatis.generator.api.GeneratedJavaFile;
@@ -18,18 +18,20 @@ import java.util.List;
  * @author helecong
  * @date 2018/12/17
  */
-public class UpdateMethodControllerModel extends BaseControllerDefaultModel {
-    public UpdateMethodControllerModel(ClassProperty topClassProperty, VariableProperty serviceVariable, VariableProperty entityVariable, CommonGeneratingParam commonGeneratingParam, boolean interfaceClass) {
-        super(topClassProperty,serviceVariable,entityVariable,commonGeneratingParam,interfaceClass);
-        initMethod();
-    }
+public class InstallListMethodControllerModel extends BaseMethod {
 
-    private static final String methodName = "update";
-    private static final String methodDoc = "更新数据";
+
+    private static final String methodName = "insertList";
+    private static final String methodDoc = "批量插入数据";
     private String resultClassName = "";
     private String requestClassName = "";
 
-    private void initMethod() {
+    public InstallListMethodControllerModel(GeneratorCentext generatorCentext, ClassProperty topClassProperty, VariableProperty entityVariable) {
+        super(generatorCentext, topClassProperty, entityVariable);
+    }
+
+    @Override
+    protected void initMethod() {
         resultClassName = createResultClass();
         requestClassName = createRequestClass();
         this.setMothodName(methodName);
@@ -38,15 +40,11 @@ public class UpdateMethodControllerModel extends BaseControllerDefaultModel {
 
         if(interfaceClass){
             this.setAnnotations("@RequestMapping(value = \""+methodName+"\", method = RequestMethod.POST)");
-            if(commonGeneratingParam.isAddSwaggerAPIAnnotation()){
+            if(generatorCentext.isAddSwaggerAPIAnnotation()){
                 topClassProperty.setImportClasss("io.swagger.annotations.ApiOperation");
                 this.setAnnotations("@ApiOperation(value = \""+methodDoc+entityVariable.getDoc()+"\")");
             }
         }else{
-            topClassProperty.setImportClasss("com.dev999.framework.util.BeanDisponseUtils");
-            topClassProperty.setImportClasss("java.util.List");
-            topClassProperty.setImportClasss("java.util.Map");
-            this.setAnnotations("@Override");
         }
 
         List<VariableProperty> params = new ArrayList<VariableProperty>();
@@ -70,11 +68,7 @@ public class UpdateMethodControllerModel extends BaseControllerDefaultModel {
         newLine();
         table(2).append(resultClassName).append(" response = new ").append(resultClassName).append("();");
         newLine();
-        table(2).append(entityVariable.getVariableType()+" "+ entityVariable.getVariableName() +" = new "+entityVariable.getVariableType()+"();");
-        newLine();
-        table(2).append("BeanDisponseUtils.copyProperties(request,"+entityVariable.getVariableName()+");");
-        newLine();
-        table(2).append(serviceVariable.getVariableName()+"."+methodName+"("+entityVariable.getVariableName()+");");
+        table(2).append(serviceVariable.getVariableName()+"."+methodName+"(request.getData());");
         newLine();
         table(2).append("return response;");
         newLine();
@@ -89,22 +83,27 @@ public class UpdateMethodControllerModel extends BaseControllerDefaultModel {
 
         ClassProperty classProperty = new ClassProperty();
         classProperty.setClassName(resultClass);
-        String packagePath = commonGeneratingParam.getControllerPackagePath()+"."+entityVariable.getVariableName().toLowerCase()+".vo";
+        String packagePath = generatorCentext.getControllerPackagePath()+"."+entityVariable.getVariableName().toLowerCase()+".vo";
 
         classProperty.setPackagePath(packagePath);
         classProperty.setImportClasss("com.dev999.framework.common.AbstractServiceRequest");
+        classProperty.setImportClasss(entityVariable.getFullyQualifiedName());
+        classProperty.setImportClasss("java.util.List");
 
         classProperty.setExtensClass("AbstractServiceRequest");
 
         // 通过实体类获取
-        parseField(classProperty);
 
-        if(commonGeneratingParam.isAddSwaggerAPIAnnotation()){
+        VariableProperty variableProperty = new VariableProperty("List<"+entityVariable.getVariableType()+">","data");
+        classProperty.setGlobalVariables(variableProperty);
+
+        if(generatorCentext.isAddSwaggerAPIAnnotation()){
             classProperty.setImportClasss("io.swagger.annotations.ApiModel");
             classProperty.setImportClasss("io.swagger.annotations.ApiModelProperty");
+            variableProperty.setAnnotations("@ApiModelProperty(value = \""+entityVariable.getDoc()+"\")");
             classProperty.setAnnotations("@ApiModel(value = \""+methodName+"请求参数\")");
         }
-        commonGeneratingParam.getSourceList().add(classProperty);
+        generatorCentext.getSourceList().add(classProperty);
 
         topClassProperty.setImportClasss(packagePath+"."+resultClass);
         return resultClass;
@@ -112,7 +111,7 @@ public class UpdateMethodControllerModel extends BaseControllerDefaultModel {
 
     private void parseField(ClassProperty classProperty) {
 
-        GeneratedJavaFile generatedJavaFile = commonGeneratingParam.getEntityJavaFiles().get(entityVariable.getVariableType());
+        GeneratedJavaFile generatedJavaFile = generatorCentext.getEntityJavaFiles().get(entityVariable.getVariableType());
 
         CompilationUnit compilationUnit = generatedJavaFile.getCompilationUnit();
         TopLevelClass topLevelClass = null;
@@ -122,7 +121,7 @@ public class UpdateMethodControllerModel extends BaseControllerDefaultModel {
         List<Field> fields = topLevelClass.getFields();
 
         String doc = "";
-        boolean addSwaggerAPIAnnotation = commonGeneratingParam.isAddSwaggerAPIAnnotation();
+        boolean addSwaggerAPIAnnotation = generatorCentext.isAddSwaggerAPIAnnotation();
         for(Field field : fields){
             VariableProperty variableProperty = new VariableProperty(field.getType().getShortName(),field.getName());
             doc = FieldUtils.getFielDoc(field);
@@ -143,18 +142,18 @@ public class UpdateMethodControllerModel extends BaseControllerDefaultModel {
 
         ClassProperty classProperty = new ClassProperty();
         classProperty.setClassName(resultClass);
-        String packagePath = commonGeneratingParam.getControllerPackagePath()+"."+entityVariable.getVariableName().toLowerCase()+".vo";
+        String packagePath = generatorCentext.getControllerPackagePath()+"."+entityVariable.getVariableName().toLowerCase()+".vo";
 
         classProperty.setPackagePath(packagePath);
         classProperty.setImportClasss("com.dev999.framework.common.AbstractServiceResponse");
 
         classProperty.setExtensClass("AbstractServiceResponse");
 
-        if(commonGeneratingParam.isAddSwaggerAPIAnnotation()){
+        if(generatorCentext.isAddSwaggerAPIAnnotation()){
             classProperty.setImportClasss("io.swagger.annotations.ApiModel");
             classProperty.setAnnotations("@ApiModel(value = \""+methodName+"返回结果\")");
         }
-        commonGeneratingParam.getSourceList().add(classProperty);
+        generatorCentext.getSourceList().add(classProperty);
 
         topClassProperty.setImportClasss(packagePath+"."+resultClass);
         return resultClass;

@@ -2,7 +2,7 @@ package com.dev999.maven.genertation.dom.dev999;
 
 import com.dev999.maven.genertation.property.ClassProperty;
 import com.dev999.maven.genertation.property.VariableProperty;
-import com.dev999.maven.genertation.service.CommonGeneratingParam;
+import com.dev999.maven.genertation.service.GeneratorCentext;
 import com.dev999.maven.genertation.utils.NameUtils;
 import com.dev999.maven.genertation.utils.StringUtils;
 
@@ -17,24 +17,6 @@ import java.util.Set;
 public class DefaultServiceJavaFile extends ClassProperty{
 
     /**
-     * dao包路径
-     */
-    private String daoPackage;
-    /**
-     * DaoBean 的名称
-     */
-    private String daoBeanName;
-
-    /**
-     * daoBean的别名，用于注释生成，如果没有默认为 daobean的名称
-     */
-    private String daoBeanAlias;
-
-    /**
-     * 实体类包结构
-     */
-    private String entityPackage;
-    /**
      * 实体类的名称
      */
     private String entityName;
@@ -42,10 +24,11 @@ public class DefaultServiceJavaFile extends ClassProperty{
      * 实体类的别名，用于注释生成，如果没有默认为 entityName的名称
      */
     private String entityAlias;
-    private CommonGeneratingParam commonGeneratingParam;
+    private GeneratorCentext generatorCentext;
+    private VariableProperty daoVariable;
 
-    public DefaultServiceJavaFile(CommonGeneratingParam commonGeneratingParam){
-        this.commonGeneratingParam = commonGeneratingParam;
+    public DefaultServiceJavaFile(GeneratorCentext generatorCentext){
+        this.generatorCentext = generatorCentext;
     }
 
     /**
@@ -55,35 +38,41 @@ public class DefaultServiceJavaFile extends ClassProperty{
     public DefaultServiceJavaFile initSource(){
 
         initPatam();
+        initDaoVariable();
+        initClass();
+        String entityFullPath = generatorCentext.getEntityJavaFiles().get(entityName).getCompilationUnit().getType().getFullyQualifiedName();
 
-        this.setImportClasss(entityPackage+"."+entityName);
-        this.setImportClasss(daoPackage+"."+daoBeanName);
+        this.setImportClasss(entityFullPath);
+        this.setImportClasss(daoVariable.getFullyQualifiedName());
         this.setImportClasss("org.springframework.stereotype.Service");
         this.setImportClasss("org.springframework.beans.factory.annotation.Autowired");
         this.setImportClasss("java.util.List");
         this.setImportClasss("java.util.Map");
         this.setImportClasss("tk.mybatis.mapper.entity.Example");
         this.setImportClasss("tk.mybatis.mapper.entity.Example.Criteria");
-        this.setImportClasss(NameUtils.serviceInterfaceFullPath(commonGeneratingParam.getServicePackagePath(),entityName));
+        this.setImportClasss(NameUtils.serviceInterfaceFullPath(generatorCentext.getServicePackagePath(),entityName));
 
         this.setDoc(entityAlias+" service实现类");
         this.setAnnotations("@Service");
         this.setInterfaceClasss(NameUtils.serviceInterfaceName(entityName));
 
-        Set<VariableProperty> globalVariables = new HashSet<VariableProperty>();
+        this.setGlobalVariables(daoVariable);
 
-        VariableProperty daoBean = new VariableProperty(StringUtils.firstNameUpper(daoBeanName), StringUtils.firstNameLower(daoBeanName));
-        daoBean.setAnnotations("@Autowired");
-        globalVariables.add(daoBean);
+        VariableProperty entityBean = new VariableProperty(entityName, StringUtils.firstNameLower(entityName));
+        entityBean.setFullyQualifiedName(entityFullPath);
+        entityBean.setDoc(entityAlias);
 
-        this.setGlobalVariables(globalVariables);
-
-        this.setMethods(new DefaultServiceMethods(daoBeanName,entityName,false).getDefaultMethods());
+        new DefaultServiceMethods(generatorCentext,this,entityBean).getDefaultMethods();
 
         this.setGeneratedGetter(false);
         this.setGeneratedSetter(false);
 
         return this;
+    }
+
+    private void initClass() {
+        this.setClassName(NameUtils.serviceName(entityName));
+        this.setPackagePath(NameUtils.servicePackagePath(generatorCentext.getServicePackagePath(),entityName));
     }
 
     private void initPatam() {
@@ -94,14 +83,12 @@ public class DefaultServiceJavaFile extends ClassProperty{
     }
 
 
-    /**
-     * 设置 daobean的名称
-     * @param daoBeanName
-     * @return
-     */
-    public DefaultServiceJavaFile setDaoBeanName(String daoBeanName){
-        this.daoBeanName = daoBeanName;
-        return this;
+
+    public VariableProperty initDaoVariable(){
+        this.daoVariable = new VariableProperty(NameUtils.daoName(entityName),NameUtils.daoVariableName(entityName));
+        this.daoVariable.setFullyQualifiedName(NameUtils.daoInterfaceFullPath(generatorCentext.getTargetDaoPackage(),entityName));
+        this.daoVariable.setAnnotations("@Autowired");
+        return daoVariable;
     }
 
     /**
@@ -111,21 +98,6 @@ public class DefaultServiceJavaFile extends ClassProperty{
      */
     public DefaultServiceJavaFile setEntityName(String entityName){
         this.entityName = entityName;
-        return this;
-    }
-
-    public DefaultServiceJavaFile setDaoPackage(String daoPackage) {
-        this.daoPackage = daoPackage;
-        return this;
-    }
-
-    public DefaultServiceJavaFile setDaoBeanAlias(String daoBeanAlias) {
-        this.daoBeanAlias = daoBeanAlias;
-        return this;
-    }
-
-    public DefaultServiceJavaFile setEntityPackage(String entityPackage) {
-        this.entityPackage = entityPackage;
         return this;
     }
 

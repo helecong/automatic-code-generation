@@ -1,6 +1,4 @@
-package com.dev999.maven.genertation.dom.dev999.model;
-
-import com.dev999.maven.genertation.property.MethodProperty;
+package com.dev999.maven.genertation.dom.dev999.method;
 
 import com.dev999.maven.genertation.property.MethodProperty;
 
@@ -22,5 +20,11 @@ public abstract class BaseDefaultModel extends MethodProperty {
             this.setAnnotations("@Override");
         }
 
+        initMethod();
     }
+
+    /**
+     * 初始化加载方法
+     */
+    protected abstract void initMethod();
 }

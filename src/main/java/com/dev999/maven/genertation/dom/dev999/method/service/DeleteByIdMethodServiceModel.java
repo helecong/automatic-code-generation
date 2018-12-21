@@ -1,7 +1,10 @@
-package com.dev999.maven.genertation.dom.dev999.model.service;
+package com.dev999.maven.genertation.dom.dev999.method.service;
 
-import com.dev999.maven.genertation.dom.dev999.model.BaseDefaultModel;
+import com.dev999.maven.genertation.dom.dev999.method.BaseDefaultModel;
+import com.dev999.maven.genertation.dom.dev999.method.BaseMethod;
+import com.dev999.maven.genertation.property.ClassProperty;
 import com.dev999.maven.genertation.property.VariableProperty;
+import com.dev999.maven.genertation.service.GeneratorCentext;
 import com.dev999.maven.genertation.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -11,13 +14,14 @@ import java.util.List;
  * @author helecong
  * @date 2018/12/17
  */
-public class DeleteByIdMethodServiceModel extends BaseDefaultModel {
-    public DeleteByIdMethodServiceModel(String daoBeanName, String entityName,boolean interfaceClass) {
-        super(daoBeanName,entityName,interfaceClass);
-        initMethod();
+public class DeleteByIdMethodServiceModel extends BaseMethod {
+
+    public DeleteByIdMethodServiceModel(GeneratorCentext generatorCentext, ClassProperty topClassProperty, VariableProperty entityVariable) {
+        super(generatorCentext, topClassProperty, entityVariable);
     }
 
-    private void initMethod() {
+    @Override
+    protected void initMethod() {
         this.setMothodName("deleteById");
         this.setResultClass("int");
         this.setDoc("通过id删除数据");
@@ -36,7 +40,7 @@ public class DeleteByIdMethodServiceModel extends BaseDefaultModel {
         sb = new StringBuilder();
 
         newLine();
-        table(2).append("return "+StringUtils.firstNameLower(daoBeanName)+".deleteByPrimaryKey(id);");
+        table(2).append("return "+daoVariable.getVariableName()+".deleteByPrimaryKey(id);");
 
         String s = sb.toString();
         sb = null;

@@ -17,9 +17,8 @@ package com.dev999.maven.genertation.mybatis.api;
 
 
 import com.dev999.maven.genertation.MavenProgressCallback;
-import com.dev999.maven.genertation.service.CommonGeneratingDispose;
+import com.dev999.maven.genertation.service.GeneratorCentext;
 import com.dev999.maven.genertation.utils.FieldUtils;
-import org.json.JSONObject;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.GeneratedXmlFile;
 import org.mybatis.generator.api.ProgressCallback;
@@ -37,7 +36,6 @@ import org.mybatis.generator.internal.DefaultShellCallback;
 import org.mybatis.generator.internal.NullProgressCallback;
 import org.mybatis.generator.internal.ObjectFactory;
 import org.mybatis.generator.internal.XmlFileMergerJaxp;
-import sun.net.www.content.image.gif;
 
 import java.io.*;
 import java.sql.SQLException;
@@ -64,7 +62,7 @@ import static org.mybatis.generator.internal.util.messages.Messages.getString;
  * 
  * @author Jeff Butler
  */
-public class MyBatisGenerator extends CommonGeneratingDispose {
+public class MyBatisGenerator extends GeneratorCentext {
 
     private Configuration configuration;
 

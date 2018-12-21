@@ -1,9 +1,9 @@
 package com.dev999.maven.genertation.dom.dev999;
 
-import com.dev999.maven.genertation.dom.dev999.model.service.*;
-import com.dev999.maven.genertation.property.MethodProperty;
-
-import java.util.*;
+import com.dev999.maven.genertation.dom.dev999.method.service.*;
+import com.dev999.maven.genertation.property.ClassProperty;
+import com.dev999.maven.genertation.property.VariableProperty;
+import com.dev999.maven.genertation.service.GeneratorCentext;
 
 /**
  * 默认的service层方法
@@ -11,69 +11,58 @@ import java.util.*;
  * @date 2018/12/17
  */
 public class DefaultServiceMethods {
-    private String daoBeanName;
-    private String entityName;
+    private VariableProperty entityVariable;
+    private GeneratorCentext generatorCentext;
+    private ClassProperty topClassProperty;
 
-    private List<MethodProperty> methodProperties ;
-    private boolean interfaceClass = false;
 
-    public DefaultServiceMethods(String daoBeanName,String entityName,boolean interfaceClass){
-        this.daoBeanName = daoBeanName;
-        this.entityName = entityName;
-        this.interfaceClass = interfaceClass;
+    public DefaultServiceMethods( GeneratorCentext generatorCentext,ClassProperty topClassProperty, VariableProperty entityVariable){
+        this.entityVariable = entityVariable;
+        this.generatorCentext = generatorCentext;
+        this.topClassProperty = topClassProperty;
     }
 
-    public List<MethodProperty> getDefaultMethods(){
-        methodProperties = new ArrayList<MethodProperty>();
+    public void getDefaultMethods(){
 
         // 增加
-        methodProperties.addAll(insertMethod());
+        insertMethod();
 
         // 删除
-        methodProperties.addAll(delectMethod());
+        delectMethod();
 
         // 修改
-        methodProperties.addAll(updateMethod());
+        updateMethod();
 
         // 查询
-        methodProperties.addAll(queryMethod());
+        queryMethod();
 
-        return methodProperties;
     }
 
-    private Collection<? extends MethodProperty> updateMethod() {
+    private void updateMethod() {
 
-        List<MethodProperty> methods = new ArrayList<MethodProperty>();
+        new UpdateMethodServiceModel(generatorCentext,topClassProperty,entityVariable);
 
-        methods.add(new UpdateMethodServiceModel(daoBeanName,entityName,interfaceClass));
-
-        return methods;
     }
 
-    private Collection<? extends MethodProperty> queryMethod() {
-        List<MethodProperty> methods = new ArrayList<MethodProperty>();
+    private void queryMethod() {
 
-        methods.add(new QueryListByMapMethodServiceModel(daoBeanName,entityName,interfaceClass));
-        methods.add(new QueryByIdMethodServiceModel(daoBeanName,entityName,interfaceClass));
+        new QueryListByMapMethodServiceModel(generatorCentext,topClassProperty,entityVariable);
+        new QueryByIdMethodServiceModel(generatorCentext,topClassProperty,entityVariable);
 
-        return methods;
+        
     }
 
-    private Collection<? extends MethodProperty> delectMethod() {
-        List<MethodProperty> methods = new ArrayList<MethodProperty>();
+    private void delectMethod() {
 
-        methods.add(new DeleteByIdMethodServiceModel(daoBeanName,entityName,interfaceClass));
+        new DeleteByIdMethodServiceModel(generatorCentext,topClassProperty,entityVariable);
 
-        return methods;
     }
 
-    private Collection<? extends MethodProperty> insertMethod() {
-        List<MethodProperty> methods = new ArrayList<MethodProperty>();
+    private void insertMethod() {
 
-        methods.add(new InsertMethodServiceModel(daoBeanName,entityName,interfaceClass));
-        methods.add(new InsertListMethodServiceModel(daoBeanName,entityName,interfaceClass));
+        new InsertMethodServiceModel(generatorCentext,topClassProperty,entityVariable);
+        new InsertListMethodServiceModel(generatorCentext,topClassProperty,entityVariable);
 
-        return methods;
     }
 
 }

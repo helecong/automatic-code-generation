@@ -2,6 +2,10 @@ package com.dev999.maven.genertation.dom.dev999;
 
 import com.dev999.maven.genertation.constant.ApplicationConstant;
 import com.dev999.maven.genertation.property.ClassProperty;
+import com.dev999.maven.genertation.property.VariableProperty;
+import com.dev999.maven.genertation.service.GeneratorCentext;
+import com.dev999.maven.genertation.utils.NameUtils;
+import com.dev999.maven.genertation.utils.StringUtils;
 
 /**
  *  基于 dev999 的Service 接口 java file
@@ -11,24 +15,6 @@ import com.dev999.maven.genertation.property.ClassProperty;
 public class DefaultServiceInterfaceJavaFile extends ClassProperty{
 
     /**
-     * dao包路径
-     */
-    private String daoPackage;
-    /**
-     * DaoBean 的名称
-     */
-    private String daoBeanName;
-
-    /**
-     * daoBean的别名，用于注释生成，如果没有默认为 daobean的名称
-     */
-    private String daoBeanAlias;
-
-    /**
-     * 实体类包结构
-     */
-    private String entityPackage;
-    /**
      * 实体类的名称
      */
     private String entityName;
@@ -37,6 +23,12 @@ public class DefaultServiceInterfaceJavaFile extends ClassProperty{
      */
     private String entityAlias;
 
+    private GeneratorCentext generatorCentext;
+
+    public DefaultServiceInterfaceJavaFile(GeneratorCentext generatorCentext){
+        this.generatorCentext = generatorCentext;
+    }
+
     /**
      * 初始化文件
      * @return
@@ -44,20 +36,29 @@ public class DefaultServiceInterfaceJavaFile extends ClassProperty{
     public DefaultServiceInterfaceJavaFile initSource(){
 
         initPatam();
+        initClass();
+        String entityFullPath = generatorCentext.getEntityJavaFiles().get(entityName).getCompilationUnit().getType().getFullyQualifiedName();
 
-        this.setImportClasss(entityPackage+"."+entityName);
+        this.setImportClasss(entityFullPath);
         this.setImportClasss("java.util.List");
         this.setImportClasss("java.util.Map");
-
-        this.setDoc(entityAlias+" service接口");
         this.setClassTyoe(ApplicationConstant.CLASS_TYPE_INTERFACE);
 
-        this.setMethods(new DefaultServiceMethods(daoBeanName,entityName,true).getDefaultMethods());
+        VariableProperty entityBean = new VariableProperty(entityName, StringUtils.firstNameLower(entityName));
+        entityBean.setFullyQualifiedName(entityFullPath);
+        entityBean.setDoc(entityAlias);
+
+        new DefaultServiceMethods(generatorCentext,this,entityBean).getDefaultMethods();
 
         this.setGeneratedGetter(false);
         this.setGeneratedSetter(false);
 
         return this;
+    }
+
+    private void initClass() {
+        this.setClassName(NameUtils.serviceInterfaceName(entityName));
+        this.setPackagePath(NameUtils.serviceInterfacePackagePath(generatorCentext.getServicePackagePath(),entityName));
     }
 
     private void initPatam() {
@@ -68,15 +69,7 @@ public class DefaultServiceInterfaceJavaFile extends ClassProperty{
     }
 
 
-    /**
-     * 设置 daobean的名称
-     * @param daoBeanName
-     * @return
-     */
-    public DefaultServiceInterfaceJavaFile setDaoBeanName(String daoBeanName){
-        this.daoBeanName = daoBeanName;
-        return this;
-    }
+
 
     /**
      * 设置 实体类的全路径地址
@@ -85,21 +78,6 @@ public class DefaultServiceInterfaceJavaFile extends ClassProperty{
      */
     public DefaultServiceInterfaceJavaFile setEntityName(String entityName){
         this.entityName = entityName;
-        return this;
-    }
-
-    public DefaultServiceInterfaceJavaFile setDaoPackage(String daoPackage) {
-        this.daoPackage = daoPackage;
-        return this;
-    }
-
-    public DefaultServiceInterfaceJavaFile setDaoBeanAlias(String daoBeanAlias) {
-        this.daoBeanAlias = daoBeanAlias;
-        return this;
-    }
-
-    public DefaultServiceInterfaceJavaFile setEntityPackage(String entityPackage) {
-        this.entityPackage = entityPackage;
         return this;
     }
 

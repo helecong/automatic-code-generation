@@ -1,7 +1,6 @@
 package com.dev999.maven.genertation;
 
 import com.dev999.maven.genertation.mybatis.api.MyBatisGenerator;
-import com.dev999.maven.genertation.service.CommonGeneratingDispose;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -129,7 +128,7 @@ public class MyBatisGeneratorMojo extends AbstractMojo {
 //        getLog().info("开始生产serivice");
 //        // 生成service 和 controller
 //        MavenProgressCallback callback = new MavenProgressCallback(getLog(),true);
-//        CommonGeneratingDispose commonGeneratingDispose = new CommonGeneratingDispose(callback);
+//        GeneratorCentext commonGeneratingDispose = new GeneratorCentext(callback);
 //        commonGeneratingDispose.initParam(configuration);
 //        commonGeneratingDispose.startCreate();
 
@@ -230,6 +229,10 @@ public class MyBatisGeneratorMojo extends AbstractMojo {
         } catch (InterruptedException e) {
             // ignore (will never happen with the DefaultShellCallback)
             ;
+        }catch (Exception e) {
+            // ignore (will never happen with the DefaultShellCallback)
+            ;
+            getLog().error(e);
         }
 
         for (String error : warnings) {

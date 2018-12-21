@@ -50,4 +50,24 @@ public class NameUtils {
     public static String controllerInterfaceFullPath(String controllerPackagePath,String entityName){
         return controllerPackagePath+"."+entityName.toLowerCase()+"."+controllerInterfaceName(entityName);
     }
+
+    public static String daoName(String entityName){
+        return StringUtils.firstNameUpper(entityName)+"Mapper";
+    }
+
+    public static String daoVariableName(String entityName){
+        return StringUtils.firstNameLower(entityName)+"Mapper";
+    }
+
+    public static String daoInterfaceFullPath(String daoPakgePath , String entityName){
+        return daoPakgePath+"."+daoName(entityName);
+    }
+
+    public static String serviceInterfacePackagePath(String servicePackagePath, String entityName) {
+        return servicePackagePath+"."+entityName.toLowerCase();
+    }
+
+    public static String servicePackagePath(String servicePackagePath, String entityName) {
+        return servicePackagePath+"."+entityName.toLowerCase()+".impl";
+    }
 }

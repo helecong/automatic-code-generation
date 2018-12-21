@@ -1,8 +1,10 @@
-package com.dev999.maven.genertation.dom.dev999.model.service;
+package com.dev999.maven.genertation.dom.dev999.method.service;
 
-import com.dev999.maven.genertation.dom.dev999.model.BaseDefaultModel;
-import com.dev999.maven.genertation.property.MethodProperty;
+import com.dev999.maven.genertation.dom.dev999.method.BaseDefaultModel;
+import com.dev999.maven.genertation.dom.dev999.method.BaseMethod;
+import com.dev999.maven.genertation.property.ClassProperty;
 import com.dev999.maven.genertation.property.VariableProperty;
+import com.dev999.maven.genertation.service.GeneratorCentext;
 import com.dev999.maven.genertation.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -13,16 +15,17 @@ import java.util.List;
  * @author helecong
  * @date 2018/12/17
  */
-public class QueryListByMapMethodServiceModel extends BaseDefaultModel {
+public class QueryListByMapMethodServiceModel extends BaseMethod {
 
-    public QueryListByMapMethodServiceModel(String daoBeanName, String entityName,boolean interfaceClass){
-        super(daoBeanName,entityName,interfaceClass);
-        initMethod();
+
+    public QueryListByMapMethodServiceModel(GeneratorCentext generatorCentext, ClassProperty topClassProperty, VariableProperty entityVariable) {
+        super(generatorCentext, topClassProperty, entityVariable);
     }
 
-    private void initMethod() {
+    @Override
+    protected void initMethod() {
         this.setMothodName("queryListByMap");
-        this.setResultClass("List<"+ StringUtils.firstNameUpper(entityName)+">");
+        this.setResultClass("List<"+ entityVariable.getVariableType()+">");
         this.setDoc("通过Map条件查询数据");
 
         List<VariableProperty> params = new ArrayList<VariableProperty>();
@@ -39,13 +42,13 @@ public class QueryListByMapMethodServiceModel extends BaseDefaultModel {
         sb = new StringBuilder();
 
         newLine();
-        table(2).append("Example example = new Example("+StringUtils.firstNameUpper(entityName)+".class);");
+        table(2).append("Example example = new Example("+entityVariable.getVariableType()+".class);");
         newLine();
         table(2).append("Criteria criteria = example.createCriteria();");
         newLine();
         table(2).append("criteria.andAllEqualTo(queryMap);");
         newLine();
-        table(2).append("return "+StringUtils.firstNameLower(daoBeanName)+".selectByExample(example);");
+        table(2).append("return "+daoVariable.getVariableName()+".selectByExample(example);");
 
         String s = sb.toString();
         sb = null;

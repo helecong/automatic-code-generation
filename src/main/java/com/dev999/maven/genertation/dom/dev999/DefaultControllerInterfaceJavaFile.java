@@ -3,7 +3,7 @@ package com.dev999.maven.genertation.dom.dev999;
 import com.dev999.maven.genertation.constant.ApplicationConstant;
 import com.dev999.maven.genertation.property.ClassProperty;
 import com.dev999.maven.genertation.property.VariableProperty;
-import com.dev999.maven.genertation.service.CommonGeneratingParam;
+import com.dev999.maven.genertation.service.GeneratorCentext;
 import com.dev999.maven.genertation.utils.NameUtils;
 import com.dev999.maven.genertation.utils.StringUtils;
 
@@ -21,10 +21,10 @@ public class DefaultControllerInterfaceJavaFile extends ClassProperty {
      * 实体类的别名，用于注释生成，如果没有默认为 entityName的名称
      */
     private String entityAlias;
-    private CommonGeneratingParam commonGeneratingParam;
+    private GeneratorCentext generatorCentext;
 
-    public DefaultControllerInterfaceJavaFile(CommonGeneratingParam commonGeneratingParam){
-        this.commonGeneratingParam = commonGeneratingParam;
+    public DefaultControllerInterfaceJavaFile(GeneratorCentext generatorCentext){
+        this.generatorCentext = generatorCentext;
     }
 
     /**
@@ -34,10 +34,9 @@ public class DefaultControllerInterfaceJavaFile extends ClassProperty {
     public DefaultControllerInterfaceJavaFile initSource(){
 
         initPatam();
-        String entityFullPath = commonGeneratingParam.getEntityJavaFiles().get(entityName).getCompilationUnit().getType().getFullyQualifiedName();
+        initClass();
 
-        this.setClassName(NameUtils.controllerInterfaceName(entityName));
-        this.setPackagePath(NameUtils.controllerInterfacePackagePath(commonGeneratingParam.getControllerPackagePath(),entityName));
+        String entityFullPath = generatorCentext.getEntityJavaFiles().get(entityName).getCompilationUnit().getType().getFullyQualifiedName();
 
         this.setImportClasss("org.springframework.web.bind.annotation.RequestMapping");
         this.setImportClasss("org.springframework.web.bind.annotation.ResponseBody");
@@ -50,7 +49,7 @@ public class DefaultControllerInterfaceJavaFile extends ClassProperty {
         this.setAnnotations("@ResponseBody");
 
         // 添加swagger注解
-        if (commonGeneratingParam.isAddSwaggerAPIAnnotation()){
+        if (generatorCentext.isAddSwaggerAPIAnnotation()){
             this.setAnnotations("@Api(value = \""+entityAlias+" 接口\", tags = {\""+entityAlias+" 接口\"})");
             this.setImportClasss("io.swagger.annotations.Api");
         }
@@ -60,18 +59,23 @@ public class DefaultControllerInterfaceJavaFile extends ClassProperty {
 
         VariableProperty serviceBean = new VariableProperty(serviceName, serviceVariableName);
         serviceBean.setAnnotations("@Autowired");
-        serviceBean.setFullyQualifiedName(NameUtils.serviceInterfaceFullPath(commonGeneratingParam.getServicePackagePath(),entityName));
+        serviceBean.setFullyQualifiedName(NameUtils.serviceInterfaceFullPath(generatorCentext.getServicePackagePath(),entityName));
 
         VariableProperty entityBean = new VariableProperty(entityName, StringUtils.firstNameLower(entityName));
         entityBean.setFullyQualifiedName(entityFullPath);
         entityBean.setDoc(entityAlias);
 
-        this.setMethods(new DefaultControllerMethods(this, serviceBean,entityBean,commonGeneratingParam,true).getDefaultMethods());
+        new DefaultControllerMethods(generatorCentext,this,entityBean).initDefaultMethods();
 
         this.setGeneratedGetter(false);
         this.setGeneratedSetter(false);
 
         return this;
+    }
+
+    private void initClass() {
+        this.setClassName(NameUtils.controllerInterfaceName(entityName));
+        this.setPackagePath(NameUtils.controllerInterfacePackagePath(generatorCentext.getControllerPackagePath(),entityName));
     }
 
     private void initPatam() {

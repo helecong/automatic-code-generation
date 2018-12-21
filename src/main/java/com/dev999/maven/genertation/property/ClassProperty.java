@@ -281,6 +281,13 @@ public class ClassProperty extends BaseProperty{
         this.methods = methods;
     }
 
+    public void setMethods(MethodProperty method) {
+        if(this.methods == null){
+            this.methods = new ArrayList<MethodProperty>();
+        }
+        this.methods.add(method);
+    }
+
     public boolean isGeneratedGetter() {
         return generatedGetter;
     }

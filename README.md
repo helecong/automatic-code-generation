@@ -5,6 +5,13 @@
 - 自动生成从数据库到controller的简单增删改查代码
 - 可选择是否生成controller
 
+# 流程说明
+
+本插件的目的是自动生成java接口，包括 数据库映射实体类，dao，service，controller
+
+因为数据库实体和dao的生成基于了原有的第三方插件（mybatis-generator-maven-plugin）,之后的service和controller的代码
+生成也是需要用到dao和service，因此新增的代码需要依赖原有的东西，为此创建一个全局上下文来保存（GeneratorCentext）
+
 # 附加说明
 
 - 自动生成数据库和dao借助原有开元插件（org.mybatis.generator  mybatis-generator-maven-plugin）
