@@ -71,7 +71,7 @@ public class InsertMethodControllerModel extends BaseMethod {
         newLine();
         table(2).append(entityVariable.getVariableType()+" "+ entityVariable.getVariableName() +" = new "+entityVariable.getVariableType()+"();");
         newLine();
-        table(2).append("BeanDisponseUtils.copyProperties(request,"+entityVariable.getVariableName()+");");
+        table(2).append("BeanDisponseUtils.copyProperties("+entityVariable.getVariableName()+",request);");
         newLine();
         table(2).append(serviceVariable.getVariableName()+"."+methodName+"("+entityVariable.getVariableName()+");");
         newLine();

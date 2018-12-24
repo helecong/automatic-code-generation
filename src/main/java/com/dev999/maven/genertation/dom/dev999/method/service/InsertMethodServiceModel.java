@@ -40,7 +40,7 @@ public class InsertMethodServiceModel extends BaseMethod {
         sb = new StringBuilder();
 
         newLine();
-        table(2).append("return "+daoVariable.getVariableName()+".insert("+entityVariable.getVariableName()+");");
+        table(2).append("return "+daoVariable.getVariableName()+".insertSelective("+entityVariable.getVariableName()+");");
 
         String s = sb.toString();
         sb = null;
