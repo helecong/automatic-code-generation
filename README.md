@@ -59,7 +59,7 @@
     <property name="addSwaggerAPIAnnotation" value="true"/>
     <!-- controller包名 在次包名下会自动更具所创建的表新增包 -->
     <property name="controllerPackagePath" value="com.dev999.azbz.commodity.controller"/>
-    <-- service包名 在次包名下会自动更具所创建的表新增包 -->
+    <!-- service包名 在次包名下会自动更具所创建的表新增包 -->
     <property name="servicePackagePath" value="com.dev999.azbz.commodity.service"/>
 
 ## 执行maven命令
