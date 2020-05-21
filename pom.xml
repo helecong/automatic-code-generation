@@ -32,11 +32,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- repository setting -->
-        <nexus.content.public.url>http://www.baj-test.boanjie.com:8081/nexus/content/groups/public/
+        <nexus.content.public.url>http://nexus.niaosiji.com:8081/nexus/content/groups/public/
         </nexus.content.public.url>
-        <nexus.deploy.snapshot.url>http://www.baj-test.boanjie.com:8081/nexus/content/repositories/snapshots/
+        <nexus.deploy.snapshot.url>http://nexus.niaosiji.com:8081/nexus/content/repositories/snapshots/
         </nexus.deploy.snapshot.url>
-        <nexus.deploy.release.url>http://www.baj-test.boanjie.com:8081/nexus/content/repositories/releases/
+        <nexus.deploy.release.url>http://nexus.niaosiji.com:8081/nexus/content/repositories/releases/
         </nexus.deploy.release.url>
     </properties>
     <distributionManagement>
