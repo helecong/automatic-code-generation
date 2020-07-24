@@ -1,10 +1,8 @@
 package com.dev999.maven.genertation.property;
 
-import com.dev999.maven.genertation.utils.DateUtils;
+import com.dev999.maven.genertation.utils.ClassPropertyUtil;
 
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -48,31 +46,6 @@ public abstract class BaseProperty {
     }
 
     /**
-     * 添加作者和时间
-     */
-    private StringBuilder addAuthAndTime() {
-        if (sb == null) {
-            sb = new StringBuilder();
-        }
-        newLine();
-        blank().append("* @author " + getUser());
-        newLine();
-        blank().append("* @version V1.0.0 Created in " + DateUtils.getFormatDate(new Date(), "yyyy/MM/dd HH:mm:ss"));
-
-        return sb;
-    }
-
-    protected String getUser() {
-        String author = "";
-        Map<String, String> getenv = System.getenv();
-        author = getenv.get("USER");
-        if ("".equals(author) || author == null) {
-            author = getenv.get("LOGNAME");
-        }
-        return author;
-    }
-
-    /**
      * 添加注释
      */
     protected StringBuilder addClassDoc(String mes) {
@@ -88,7 +61,7 @@ public abstract class BaseProperty {
             blank().append("* ").append(doc);
         }
         // 添加作者和时间
-        addAuthAndTime();
+        ClassPropertyUtil.addAuthAndTime(sb);
         newLine();
         blank().append("*/");
         return sb;

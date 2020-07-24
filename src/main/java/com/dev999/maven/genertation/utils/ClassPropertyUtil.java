@@ -27,7 +27,7 @@ public class ClassPropertyUtil {
     /**
      * 添加作者和时间
      */
-    private static StringBuilder addAuthAndTime(StringBuilder sb) {
+    public static StringBuilder addAuthAndTime(StringBuilder sb) {
         if (sb == null) {
             sb = new StringBuilder();
         }
