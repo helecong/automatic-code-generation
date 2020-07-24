@@ -104,6 +104,7 @@ public class ClassProperty extends BaseProperty{
         }
         newLine();
         newLine();
+        // 添加作者和时间
         addClassDoc(className);
         addClassAnnotations();
         newLine().append(accessModifier);

@@ -9,6 +9,7 @@ import java.util.*;
 
 /**
  * 生成 代码需要的公共参数集合
+ *
  * @author helecong
  * @date 2018/12/12
  */
@@ -59,7 +60,7 @@ public class GeneratorCentextParam {
      */
     protected String targetDaoPackage;
 
-    protected Map<String,GeneratedJavaFile> entityJavaFiles;
+    protected Map<String, GeneratedJavaFile> entityJavaFiles;
     /**
      * 原来的java文件集合
      */
@@ -72,16 +73,18 @@ public class GeneratorCentextParam {
 
 
     private static final String FALSE = "false";
+
     /**
      * 解析配置文件
+     *
      * @param configuration
      */
-    public void initParam(Configuration configuration){
+    public void initParam(Configuration configuration) {
         List<Context> contexts = configuration.getContexts();
-        for(Context context : contexts){
+        for (Context context : contexts) {
             parseContext(context);
         }
-        this.entityJavaFiles = new HashMap<String,GeneratedJavaFile>();
+        this.entityJavaFiles = new HashMap<String, GeneratedJavaFile>();
         this.sourceList = new ArrayList<ClassProperty>();
 
         //TODO 创建文件流
@@ -92,15 +95,15 @@ public class GeneratorCentextParam {
     private void parseContext(Context context) {
         Properties properties = context.getProperties();
         String generationControllerParam = properties.getProperty("generationController");
-        if(FALSE.equals(generationControllerParam)){
+        if (FALSE.equals(generationControllerParam)) {
             generationController = false;
         }
         String generationServiceParam = properties.getProperty("generationService");
-        if(FALSE.equals(generationServiceParam)){
+        if (FALSE.equals(generationServiceParam)) {
             generationService = false;
         }
         String addSwaggerAPIAnnotationParam = properties.getProperty("addSwaggerAPIAnnotation");
-        if(FALSE.equals(addSwaggerAPIAnnotationParam)){
+        if (FALSE.equals(addSwaggerAPIAnnotationParam)) {
             addSwaggerAPIAnnotation = false;
         }
         controllerPackagePath = properties.getProperty("controllerPackagePath");
@@ -109,7 +112,7 @@ public class GeneratorCentextParam {
         //获取配置的实体名称
         entityNames = new ArrayList<String>();
         List<TableConfiguration> tableConfigurations = context.getTableConfigurations();
-        for(TableConfiguration t: tableConfigurations){
+        for (TableConfiguration t : tableConfigurations) {
             entityNames.add(t.getDomainObjectName());
         }
 
@@ -118,7 +121,7 @@ public class GeneratorCentextParam {
         targetEntityPackage = javaModelGeneratorConfiguration.getTargetPackage();
 
         JavaClientGeneratorConfiguration javaClientGeneratorConfiguration = context.getJavaClientGeneratorConfiguration();
-        targetDaoPackage =javaClientGeneratorConfiguration.getTargetPackage();
+        targetDaoPackage = javaClientGeneratorConfiguration.getTargetPackage();
 
         checkParam();
     }
@@ -127,10 +130,10 @@ public class GeneratorCentextParam {
      * 校验参数
      */
     private void checkParam() {
-        if(generationService&& StringUtils.isEmpty(servicePackagePath)){
+        if (generationService && StringUtils.isEmpty(servicePackagePath)) {
             throw new RuntimeException("if \"generationService\" is true mast have \"servicePackagePath\"");
         }
-        if(generationController&& StringUtils.isEmpty(controllerPackagePath)){
+        if (generationController && StringUtils.isEmpty(controllerPackagePath)) {
             throw new RuntimeException("if \"generationController\" is true mast have \"controllerPackagePath\"");
         }
     }

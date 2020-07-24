@@ -18,6 +18,7 @@ package com.dev999.maven.genertation.mybatis.api;
 
 import com.dev999.maven.genertation.MavenProgressCallback;
 import com.dev999.maven.genertation.service.GeneratorCentext;
+import com.dev999.maven.genertation.utils.ClassPropertyUtil;
 import com.dev999.maven.genertation.utils.FieldUtils;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.GeneratedXmlFile;
@@ -25,6 +26,7 @@ import org.mybatis.generator.api.ProgressCallback;
 import org.mybatis.generator.api.ShellCallback;
 import org.mybatis.generator.api.dom.java.CompilationUnit;
 import org.mybatis.generator.api.dom.java.Field;
+import org.mybatis.generator.api.dom.java.JavaElement;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.config.Context;
@@ -50,17 +52,16 @@ import static org.mybatis.generator.internal.util.messages.Messages.getString;
 /**
  * This class is the main interface to MyBatis generator. A typical execution of
  * the tool involves these steps:
- * 
+ *
  * <ol>
  * <li>Create a Configuration object. The Configuration can be the result of a
  * parsing the XML configuration file, or it can be created solely in Java.</li>
  * <li>Create a MyBatisGenerator object</li>
  * <li>Call one of the generate() methods</li>
  * </ol>
- * 
- * @see ConfigurationParser
- * 
+ *
  * @author Jeff Butler
+ * @see ConfigurationParser
  */
 public class MyBatisGenerator extends GeneratorCentext {
 
@@ -79,24 +80,20 @@ public class MyBatisGenerator extends GeneratorCentext {
     /**
      * Constructs a MyBatisGenerator object.
      *
-     * @param configuration
-     *            The configuration for this invocation
-     * @param shellCallback
-     *            an instance of a ShellCallback interface. You may specify
-     *            <code>null</code> in which case the DefaultShellCallback will
-     *            be used.
-     * @param warnings
-     *            Any warnings generated during execution will be added to this
-     *            list. Warnings do not affect the running of the tool, but they
-     *            may affect the results. A typical warning is an unsupported
-     *            data type. In that case, the column will be ignored and
-     *            generation will continue. You may specify <code>null</code> if
-     *            you do not want warnings returned.
-     * @throws InvalidConfigurationException
-     *             if the specified configuration is invalid
+     * @param configuration The configuration for this invocation
+     * @param shellCallback an instance of a ShellCallback interface. You may specify
+     *                      <code>null</code> in which case the DefaultShellCallback will
+     *                      be used.
+     * @param warnings      Any warnings generated during execution will be added to this
+     *                      list. Warnings do not affect the running of the tool, but they
+     *                      may affect the results. A typical warning is an unsupported
+     *                      data type. In that case, the column will be ignored and
+     *                      generation will continue. You may specify <code>null</code> if
+     *                      you do not want warnings returned.
+     * @throws InvalidConfigurationException if the specified configuration is invalid
      */
     public MyBatisGenerator(Configuration configuration, ShellCallback shellCallback,
-                            List<String> warnings,MavenProgressCallback callback) throws InvalidConfigurationException {
+                            List<String> warnings, MavenProgressCallback callback) throws InvalidConfigurationException {
         super(callback);
         if (configuration == null) {
             throw new IllegalArgumentException(getString("RuntimeError.2")); //$NON-NLS-1$
@@ -130,13 +127,11 @@ public class MyBatisGenerator extends GeneratorCentext {
      * ProgressCallback interface. This version of the method runs all
      * configured contexts.
      *
-     * @param callback
-     *            an instance of the ProgressCallback interface, or
-     *            <code>null</code> if you do not require progress information
+     * @param callback an instance of the ProgressCallback interface, or
+     *                 <code>null</code> if you do not require progress information
      * @throws SQLException
      * @throws IOException
-     * @throws InterruptedException
-     *             if the method is canceled through the ProgressCallback
+     * @throws InterruptedException if the method is canceled through the ProgressCallback
      */
     public void generate(ProgressCallback callback) throws SQLException,
             IOException, InterruptedException {
@@ -148,18 +143,15 @@ public class MyBatisGenerator extends GeneratorCentext {
      * but progress can be provided and the method can be canceled through the
      * ProgressCallback interface.
      *
-     * @param callback
-     *            an instance of the ProgressCallback interface, or
-     *            <code>null</code> if you do not require progress information
-     * @param contextIds
-     *            a set of Strings containing context ids to run. Only the
-     *            contexts with an id specified in this list will be run. If the
-     *            list is null or empty, than all contexts are run.
+     * @param callback   an instance of the ProgressCallback interface, or
+     *                   <code>null</code> if you do not require progress information
+     * @param contextIds a set of Strings containing context ids to run. Only the
+     *                   contexts with an id specified in this list will be run. If the
+     *                   list is null or empty, than all contexts are run.
      * @throws InvalidConfigurationException
      * @throws SQLException
      * @throws IOException
-     * @throws InterruptedException
-     *             if the method is canceled through the ProgressCallback
+     * @throws InterruptedException          if the method is canceled through the ProgressCallback
      */
     public void generate(ProgressCallback callback, Set<String> contextIds)
             throws SQLException, IOException, InterruptedException {
@@ -171,25 +163,21 @@ public class MyBatisGenerator extends GeneratorCentext {
      * but progress can be provided and the method can be cancelled through the
      * ProgressCallback interface.
      *
-     * @param callback
-     *            an instance of the ProgressCallback interface, or
-     *            <code>null</code> if you do not require progress information
-     * @param contextIds
-     *            a set of Strings containing context ids to run. Only the
-     *            contexts with an id specified in this list will be run. If the
-     *            list is null or empty, than all contexts are run.
-     * @param fullyQualifiedTableNames
-     *            a set of table names to generate. The elements of the set must
-     *            be Strings that exactly match what's specified in the
-     *            configuration. For example, if table name = "foo" and schema =
-     *            "bar", then the fully qualified table name is "foo.bar". If
-     *            the Set is null or empty, then all tables in the configuration
-     *            will be used for code generation.
+     * @param callback                 an instance of the ProgressCallback interface, or
+     *                                 <code>null</code> if you do not require progress information
+     * @param contextIds               a set of Strings containing context ids to run. Only the
+     *                                 contexts with an id specified in this list will be run. If the
+     *                                 list is null or empty, than all contexts are run.
+     * @param fullyQualifiedTableNames a set of table names to generate. The elements of the set must
+     *                                 be Strings that exactly match what's specified in the
+     *                                 configuration. For example, if table name = "foo" and schema =
+     *                                 "bar", then the fully qualified table name is "foo.bar". If
+     *                                 the Set is null or empty, then all tables in the configuration
+     *                                 will be used for code generation.
      * @throws InvalidConfigurationException
      * @throws SQLException
      * @throws IOException
-     * @throws InterruptedException
-     *             if the method is canceled through the ProgressCallback
+     * @throws InterruptedException          if the method is canceled through the ProgressCallback
      */
     public void generate(ProgressCallback callback, Set<String> contextIds,
                          Set<String> fullyQualifiedTableNames) throws SQLException,
@@ -248,6 +236,8 @@ public class MyBatisGenerator extends GeneratorCentext {
         for (GeneratedJavaFile gjf : generatedJavaFiles) {
             projects.add(gjf.getTargetProject());
 
+            // 添加注释
+            addDoc(gjf);
             addSwaggerAnnotation(gjf);
         }
 
@@ -297,7 +287,6 @@ public class MyBatisGenerator extends GeneratorCentext {
         }
 
 
-
         for (GeneratedJavaFile gjf : generatedJavaFiles) {
             projects.add(gjf.getTargetProject());
 
@@ -310,8 +299,8 @@ public class MyBatisGenerator extends GeneratorCentext {
                 if (targetFile.exists()) {
                     if (shellCallback.isMergeSupported()) {
                         source = shellCallback.mergeJavaFile(gjf
-                                .getFormattedContent(), targetFile
-                                .getAbsolutePath(),
+                                        .getFormattedContent(), targetFile
+                                        .getAbsolutePath(),
                                 MergeConstants.OLD_ELEMENT_TAGS,
                                 gjf.getFileEncoding());
                     } else if (shellCallback.isOverwriteEnabled()) {
@@ -348,26 +337,42 @@ public class MyBatisGenerator extends GeneratorCentext {
     }
 
     /**
+     * 添加注释
+     *
+     * @param gjf
+     */
+    private void addDoc(GeneratedJavaFile gjf) {
+        String shortName = gjf.getCompilationUnit().getType().getShortName();
+        CompilationUnit compilationUnit = gjf.getCompilationUnit();
+
+        if (compilationUnit instanceof JavaElement) {
+            JavaElement je = (JavaElement) compilationUnit;
+            je.addJavaDocLine(ClassPropertyUtil.getCalssDoc(shortName));
+        }
+    }
+
+    /**
      * 添加swagger注解
+     *
      * @param gjf
      */
     private void addSwaggerAnnotation(GeneratedJavaFile gjf) {
         String shortName = gjf.getCompilationUnit().getType().getShortName();
 
         boolean flag = false;
-        for(String name : entityNames){
-            if(name.equals(shortName)){
+        for (String name : entityNames) {
+            if (name.equals(shortName)) {
                 flag = true;
                 break;
             }
         }
-        if(!flag){
+        if (!flag) {
             return;
-        }else{
-            entityJavaFiles.put(shortName,gjf);
+        } else {
+            entityJavaFiles.put(shortName, gjf);
         }
 
-        if(!addSwaggerAPIAnnotation){
+        if (!addSwaggerAPIAnnotation) {
             return;
         }
 
@@ -375,28 +380,27 @@ public class MyBatisGenerator extends GeneratorCentext {
         CompilationUnit compilationUnit = gjf.getCompilationUnit();
 
         TopLevelClass topLevelClass = null;
-        if(compilationUnit instanceof TopLevelClass){
-            topLevelClass = (TopLevelClass)compilationUnit;
+        if (compilationUnit instanceof TopLevelClass) {
+            topLevelClass = (TopLevelClass) compilationUnit;
         }
-        topLevelClass.addAnnotation("@ApiModel(value = \""+shortName+"\")");
+
+        topLevelClass.addAnnotation("@ApiModel(value = \"" + shortName + "\")");
         topLevelClass.addImportedType("io.swagger.annotations.ApiModel");
         topLevelClass.addImportedType("io.swagger.annotations.ApiModelProperty");
 
         //获取变量
         List<Field> fields = topLevelClass.getFields();
-        for (Field field : fields){
+        for (Field field : fields) {
             String s = FieldUtils.getFielDoc(field);
-            field.addAnnotation("@ApiModelProperty(value = \""+s+"\")");
+            field.addAnnotation("@ApiModelProperty(value = \"" + s + "\")");
         }
 
 
     }
 
-
-
     /**
      * Writes, or overwrites, the contents of the specified file
-     * 
+     *
      * @param file
      * @param content
      */
@@ -408,7 +412,7 @@ public class MyBatisGenerator extends GeneratorCentext {
         } else {
             osw = new OutputStreamWriter(fos, fileEncoding);
         }
-        
+
         BufferedWriter bw = new BufferedWriter(osw);
         bw.write(content);
         bw.close();
